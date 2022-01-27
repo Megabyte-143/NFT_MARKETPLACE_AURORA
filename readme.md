@@ -2,10 +2,19 @@
 ## Build an NFT marketplace
 ## Build an NFT marketplace (can be a copy of any existing marketplace)
 
-### List of NFTs owned by a user
-### List of NFTs available to buy
-### Auction models for NFT (optional)
-### Create a working NFT marketplace dApp, which enables users to trade NFTs on Aurora. The factory smart contract can create a user defined (configurable) NFT contract. Content creators are allowed to receive (ETH, WETH, or any Stable coin) as reward. Additionally allow creators to auction their artwork on the marketplace with the two models (timed and unlimited auction).
+ [x] List of NFTs owned by a user 
+
+ [x] List of NFTs available to buy
+
+ Auction models for NFT (optional)
+
+ Create a working NFT marketplace dApp, which enables users to trade NFTs on Aurora. 
+ 
+ The factory smart contract can create a user defined (configurable) NFT contract. 
+ 
+ Content creators are allowed to receive (ETH, WETH, or any Stable coin) as reward. 
+ 
+ Additionally allow creators to auction their artwork on the marketplace with the two models (timed and unlimited auction).
 
 Examples:
 
