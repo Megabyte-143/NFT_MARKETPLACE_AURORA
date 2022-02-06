@@ -1,4 +1,4 @@
-//
+// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.4;
 
@@ -24,5 +24,10 @@ contract NFT is ERC721URIStorage {
         setApprovalForAll(contractAddress, true);
 
         return newItemId;
+    }
+
+    function transferToken(address from, address to, uint256 tokenId) external {
+        require(ownerOf(tokenId) == from, "From address must be token owner");
+        _transfer(from, to, tokenId);
     }
 }
