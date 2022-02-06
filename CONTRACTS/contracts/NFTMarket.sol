@@ -1,4 +1,4 @@
-//
+// SPDX-License-Identifier: MIT
 
 pragma solidity ^0.8.4;
 
@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 //Security Package to avoid continuous request of buying and selling
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+import "./NFT.sol";
 
 contract NFTMarket is ReentrancyGuard {
     using Counters for Counters.Counter;
@@ -27,7 +29,9 @@ contract NFTMarket is ReentrancyGuard {
         uint256 tokenId;
         address payable seller;
         address payable owner;
+        address payable creator;
         uint256 price;
+        uint256 royalty;
         bool sold;
     }
 
@@ -39,9 +43,23 @@ contract NFTMarket is ReentrancyGuard {
         uint256 indexed tokenId,
         address seller,
         address owner,
+        address creator,
         uint256 price,
+        uint256 royalty,
         bool sold
     );
+
+    event ProductListed(
+        uint256 indexed itemId
+    );
+
+    modifier onlyItemOwner(uint256 id) {
+        require(
+            idToMarketItem[id].owner == msg.sender,
+            "Only product owner can do this operation"
+        );
+        _;
+    }
 
     // Get the Listing Price on the Platform
     function getListingPrice() public view returns (uint256) {
@@ -52,7 +70,8 @@ contract NFTMarket is ReentrancyGuard {
     function createMarketItem(
         address nftContract,
         uint256 tokenId,
-        uint256 price
+        uint256 price,
+        uint256 royalty
     ) public payable nonReentrant {
         //Conditions for creating the Item.
         require(price > 0, "Price must be at least 1 WEI");
@@ -60,6 +79,7 @@ contract NFTMarket is ReentrancyGuard {
             msg.value == listingPrice,
             "Price must be equal to listing price"
         );
+        require(royalty >= 0 && royalty <= 50, "Royalty should be between 0 and 50%");
 
         _itemIds.increment();
         uint256 itemId = _itemIds.current();
@@ -70,7 +90,9 @@ contract NFTMarket is ReentrancyGuard {
             tokenId,
             payable(msg.sender),
             payable(address(0)), // When new NFT is created its ownership add is set to 0.
+            payable(msg.sender),
             price,
+            royalty,
             false
         );
 
@@ -83,7 +105,9 @@ contract NFTMarket is ReentrancyGuard {
             tokenId,
             msg.sender,
             address(0),
+            msg.sender,
             price,
+            royalty,
             false
         );
     }
@@ -103,7 +127,10 @@ contract NFTMarket is ReentrancyGuard {
         );
 
         //Will transfer the MATIC to the seller address.
-        idToMarketItem[itemId].seller.transfer(msg.value);
+        uint256 priceToSeller = (msg.value / 100) * (100 - idToMarketItem[itemId].royalty);
+        uint256 priceToCreator = (msg.value / 100) * idToMarketItem[itemId].royalty;
+        idToMarketItem[itemId].seller.transfer(priceToSeller);
+        idToMarketItem[itemId].creator.transfer(priceToCreator);
 
         //Will transfer the ownership from the owner of this contract to the Buyer.
         IERC721(nftContract).transferFrom(address(this), msg.sender, tokenId);
@@ -116,6 +143,28 @@ contract NFTMarket is ReentrancyGuard {
         _itemSold.increment();
 
         payable(owner).transfer(listingPrice);
+    }
+
+    function reListItem(address nftContract, uint256 itemId, uint256 price) public payable nonReentrant onlyItemOwner(itemId) {
+        uint256 tokenId = idToMarketItem[itemId].tokenId;
+        require(price > 0, "Price must be at least 1 WEI");
+        require(
+            msg.value == listingPrice,
+            "Price must be equal to listing price"
+        );
+        //instantiate a NFT contract object with the matching type
+        NFT tokenContract = NFT(nftContract);
+        //call the custom transfer token method   
+        tokenContract.transferToken(msg.sender, address(this), tokenId);
+
+        address payable oldOwner = idToMarketItem[itemId].owner;
+        idToMarketItem[itemId].owner = payable(address(0));
+        idToMarketItem[itemId].seller = oldOwner;
+        idToMarketItem[itemId].price = price;
+        idToMarketItem[itemId].sold = false;
+        _itemSold.decrement();
+
+        emit ProductListed(itemId);
     }
 
     //List of NFTs Avaiable to Buy
