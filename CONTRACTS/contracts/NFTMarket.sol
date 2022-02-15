@@ -30,8 +30,11 @@ contract NFTMarket is ReentrancyGuard {
         address payable seller;
         address payable owner;
         address payable creator;
+        address payable highestBidder;
         uint256 price;
+        uint256 bidPrice;
         uint256 royalty;
+        bool auction;
         bool sold;
     }
 
@@ -44,8 +47,11 @@ contract NFTMarket is ReentrancyGuard {
         address seller,
         address owner,
         address creator,
+        address highestBidder,
         uint256 price,
+        uint256 bidPrice,
         uint256 royalty,
+        bool auction,
         bool sold
     );
 
@@ -71,7 +77,8 @@ contract NFTMarket is ReentrancyGuard {
         address nftContract,
         uint256 tokenId,
         uint256 price,
-        uint256 royalty
+        uint256 royalty,
+        bool auction
     ) public payable nonReentrant {
         //Conditions for creating the Item.
         require(price > 0, "Price must be at least 1 WEI");
@@ -91,8 +98,11 @@ contract NFTMarket is ReentrancyGuard {
             payable(msg.sender),
             payable(address(0)), // When new NFT is created its ownership add is set to 0.
             payable(msg.sender),
+            payable(msg.sender),
+            price,
             price,
             royalty,
+            auction,
             false
         );
 
@@ -106,8 +116,11 @@ contract NFTMarket is ReentrancyGuard {
             msg.sender,
             address(0),
             msg.sender,
+            msg.sender,
+            price,
             price,
             royalty,
+            auction,
             false
         );
     }
@@ -118,6 +131,10 @@ contract NFTMarket is ReentrancyGuard {
         payable
         nonReentrant
     {
+        require(
+            idToMarketItem[itemId].auction == false,
+            "Item listed for auction cannot buy directly"
+        );
         uint256 price = idToMarketItem[itemId].price;
         uint256 tokenId = idToMarketItem[itemId].tokenId;
 
@@ -140,6 +157,78 @@ contract NFTMarket is ReentrancyGuard {
 
         //Set this NFT as sold.
         idToMarketItem[itemId].sold = true;
+        _itemSold.increment();
+
+        payable(owner).transfer(listingPrice);
+    }
+
+    //Function to place bid on NFT
+    function placeBid(uint256 itemId)
+        public
+        payable
+        nonReentrant
+    {
+        require(
+            idToMarketItem[itemId].auction == true,
+            "Item not listed for auction, buy it directly from Market Place"
+        );
+        require(
+            idToMarketItem[itemId].seller != msg.sender,
+            "Owner cannot place bids"
+        );
+        uint256 bidPrice = idToMarketItem[itemId].bidPrice;
+
+        require(
+            msg.value > bidPrice,
+            "Bid should be higher than current bid"
+        );
+
+        if (idToMarketItem[itemId].highestBidder == idToMarketItem[itemId].creator) {
+            idToMarketItem[itemId].bidPrice = msg.value;
+            idToMarketItem[itemId].highestBidder = payable(msg.sender);
+        } else {
+            idToMarketItem[itemId].highestBidder.transfer(bidPrice);
+            idToMarketItem[itemId].bidPrice = msg.value;
+            idToMarketItem[itemId].highestBidder = payable(msg.sender);
+        }
+    }
+
+    //Function to sale the NFT
+    function closeAuction(address nftContract, uint256 itemId)
+        public
+        payable
+        nonReentrant
+    {
+        require(
+            idToMarketItem[itemId].auction == true,
+            "Item not listed for auction"
+        );
+        require(
+            idToMarketItem[itemId].highestBidder != idToMarketItem[itemId].creator,
+            "No bids placed on item"
+        );
+        require(
+            idToMarketItem[itemId].creator == msg.sender,
+            "Not the owner so cannot close bid"
+        );
+        uint256 bidPrice = idToMarketItem[itemId].bidPrice;
+        uint256 tokenId = idToMarketItem[itemId].tokenId;
+
+        //Will transfer the MATIC to the seller address.
+        uint256 priceToSeller = (bidPrice / 100) * (100 - idToMarketItem[itemId].royalty);
+        uint256 priceToCreator = (bidPrice / 100) * idToMarketItem[itemId].royalty;
+        idToMarketItem[itemId].seller.transfer(priceToSeller);
+        idToMarketItem[itemId].creator.transfer(priceToCreator);
+
+        //Will transfer the ownership from the owner of this contract to the Buyer.
+        IERC721(nftContract).transferFrom(address(this), idToMarketItem[itemId].highestBidder, tokenId);
+
+        //Set the local value of the owner to the Buyer(msg.sender).
+        idToMarketItem[itemId].owner = idToMarketItem[itemId].highestBidder;
+
+        //Set this NFT as sold.
+        idToMarketItem[itemId].sold = true;
+        idToMarketItem[itemId].auction = false;
         _itemSold.increment();
 
         payable(owner).transfer(listingPrice);
