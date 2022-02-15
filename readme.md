@@ -6,15 +6,15 @@
 
  [x] List of NFTs available to buy
 
- Auction models for NFT (optional)
+ [] Auction models for NFT (optional)
 
- Create a working NFT marketplace dApp, which enables users to trade NFTs on Aurora. 
+ [] Create a working NFT marketplace dApp, which enables users to trade NFTs on Aurora. 
  
- The factory smart contract can create a user defined (configurable) NFT contract. 
+ [] The factory smart contract can create a user defined (configurable) NFT contract. 
  
- Content creators are allowed to receive (ETH, WETH, or any Stable coin) as reward. 
+ [] Content creators are allowed to receive (ETH, WETH, or any Stable coin) as reward. 
  
- Additionally allow creators to auction their artwork on the marketplace with the two models (timed and unlimited auction).
+ [] Additionally allow creators to auction their artwork on the marketplace with the two models (timed and unlimited auction).
 
 Examples:
 

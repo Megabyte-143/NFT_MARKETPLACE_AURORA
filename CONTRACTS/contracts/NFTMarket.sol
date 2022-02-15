@@ -36,6 +36,7 @@ contract NFTMarket is ReentrancyGuard {
         uint256 royalty;
         bool auction;
         bool sold;
+        string typ;
     }
 
     mapping(uint256 => MarketItem) private idToMarketItem;
@@ -55,9 +56,7 @@ contract NFTMarket is ReentrancyGuard {
         bool sold
     );
 
-    event ProductListed(
-        uint256 indexed itemId
-    );
+    event ProductListed(uint256 indexed itemId);
 
     modifier onlyItemOwner(uint256 id) {
         require(
@@ -86,7 +85,10 @@ contract NFTMarket is ReentrancyGuard {
             msg.value == listingPrice,
             "Price must be equal to listing price"
         );
-        require(royalty >= 0 && royalty <= 50, "Royalty should be between 0 and 50%");
+        require(
+            royalty >= 0 && royalty <= 50,
+            "Royalty should be between 0 and 50%"
+        );
 
         _itemIds.increment();
         uint256 itemId = _itemIds.current();
@@ -144,8 +146,10 @@ contract NFTMarket is ReentrancyGuard {
         );
 
         //Will transfer the MATIC to the seller address.
-        uint256 priceToSeller = (msg.value / 100) * (100 - idToMarketItem[itemId].royalty);
-        uint256 priceToCreator = (msg.value / 100) * idToMarketItem[itemId].royalty;
+        uint256 priceToSeller = (msg.value / 100) *
+            (100 - idToMarketItem[itemId].royalty);
+        uint256 priceToCreator = (msg.value / 100) *
+            idToMarketItem[itemId].royalty;
         idToMarketItem[itemId].seller.transfer(priceToSeller);
         idToMarketItem[itemId].creator.transfer(priceToCreator);
 
@@ -243,7 +247,7 @@ contract NFTMarket is ReentrancyGuard {
         );
         //instantiate a NFT contract object with the matching type
         NFT tokenContract = NFT(nftContract);
-        //call the custom transfer token method   
+        //call the custom transfer token method
         tokenContract.transferToken(msg.sender, address(this), tokenId);
 
         address payable oldOwner = idToMarketItem[itemId].owner;
