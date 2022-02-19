@@ -1,0 +1,16 @@
+
+body {
+  margin: 0;
+  font-family: 'Nunito',sans-serif;
+  background-image: url('/public/images/bg-image.jpeg');  
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+a {
+  text-decoration: none;
+  color:black;
+}
