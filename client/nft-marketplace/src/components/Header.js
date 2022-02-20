@@ -10,7 +10,7 @@ const Header = (props) => {
   return (
     <Title>
       <a href="/">
-        <img src="/images/nft-logo.png"></img>
+        <img src="/images/nft-logo.png" alt="logo"></img>
       </a>
       <Create>
         <span id="display" onClick={() => setBurgerStatus(true)} >{props.heading}</span>

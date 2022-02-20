@@ -11,6 +11,7 @@ contract TimedAuction is ReentrancyGuard {
     uint256 public startTime;
     uint256 public endTime;
     uint256 public bidIncrement;
+    address public nftContract;
 
     // state
     bool public canceled;
@@ -39,7 +40,8 @@ contract TimedAuction is ReentrancyGuard {
         address payable _owner,
         uint256 _bidIncrement,
         uint256 _startTime,
-        uint256 _endTime
+        uint256 _endTime,
+        address _nftContract
     ) {
         if ((_endTime - _startTime) < 60) revert("Time must be atleast 1 min");
 
@@ -47,6 +49,7 @@ contract TimedAuction is ReentrancyGuard {
         bidIncrement = _bidIncrement;
         startTime = block.timestamp + _startTime;
         endTime = block.timestamp + _endTime;
+        nftContract = _nftContract;
     }
 
     // It will return the HIGHEST BID.
@@ -142,6 +145,7 @@ contract TimedAuction is ReentrancyGuard {
 
                 // Owner has Withdrawn will be true
                 ownerHasWithdrawn = true;
+
             } else if (msg.sender == highestBidder) {
                 // If the user is the highest bidder
                 withdrawalAcc = highestBidder;

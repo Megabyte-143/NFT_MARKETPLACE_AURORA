@@ -10,9 +10,9 @@
 
  [] Create a working NFT marketplace dApp, which enables users to trade NFTs on Aurora. 
  
- [] The factory smart contract can create a user defined (configurable) NFT contract. 
+ [x] The factory smart contract can create a user defined (configurable) NFT contract. 
  
- [] Content creators are allowed to receive (ETH, WETH, or any Stable coin) as reward. 
+ [x] Content creators are allowed to receive (ETH, WETH, or any Stable coin) as reward. 
  
  [] Additionally allow creators to auction their artwork on the marketplace with the two models (timed and unlimited auction).
 

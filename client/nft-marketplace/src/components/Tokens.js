@@ -1,23 +1,52 @@
 import styled from "styled-components";
-import {useState} from 'react';
+import Web3Modal from "web3modal";
+import { ethers } from "ethers";
+
+import { nftAddress, nftMarketAddress } from "../config.js"
+import NFTMarket from "../abi/NFTMarket.json"
 
 const Tokens = (props) => {
+
+
+  async function buyNFT(nft) {
+    const web3Modal = new Web3Modal();
+    const connection = await web3Modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+
+    const signer = provider.getSigner();
+    let contract = new ethers.Contract(nftMarketAddress, NFTMarket.abi, signer);
+    console.log(nft.tokenId);
+console.log(nft.price);
+
+    const price = ethers.utils.parseUnits(nft.price.toString(), 'ether');
+    console.log(price)
+    // console.log(parseInt(price,16));
+    // const price = 1;
+    const transaction = await contract.createMarketSale(
+      nftAddress,
+      5,
+      { value: price });
+    await transaction.wait();
+    
+  }
+
 
   return (
     <Container >
       <Wrap>
-        {props.nfts.map((nft,i)=>(
-          <Content key={i}>
-            <img src={nft.image}/>
-            <Inside>
-              <div>
-                <span className="infinite">{props.high}</span>
-                <span className="price">{nft.price} </span>  
-              </div>
-              <span className="buy">{props.buy}</span>
-            </Inside>
-        </Content>
-        ))}
+        {
+          props.nfts.map((nft, i) => (
+            <Content key={i}>
+              <img src={nft.image} />
+              <Inside>
+                <div>
+                  <span className="infinite">{props.high}</span>
+                  <span className="price">{nft.price} </span>
+                </div>
+                <button className="buy" onClick={()=>buyNFT(nft)}>{props.buy}</button>
+              </Inside>
+            </Content>
+          ))}
       </Wrap>
     </Container>
   );

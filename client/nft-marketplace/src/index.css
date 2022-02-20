@@ -2,7 +2,7 @@
 body {
   margin: 0;
   font-family: 'Nunito',sans-serif;
-  background-image: url('/public/images/bg-image.jpeg');  
+  /* background-image: url('/public/images/bg-image.jpeg');   */
 }
 
 code {

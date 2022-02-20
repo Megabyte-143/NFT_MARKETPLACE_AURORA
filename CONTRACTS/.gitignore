@@ -10,3 +10,6 @@ artifacts
 scripts
 test
 hardhat.config.js
+
+.projectId
+.secret
