@@ -125,7 +125,7 @@ const Create = (props) => {
             <span id="service">With preserved line-breaks</span>
         </Details>
         <Button>
-            <button>Create Item</button>
+            <a href="/"><button>Create Item</button></a>
         </Button>
       </Container>
       
