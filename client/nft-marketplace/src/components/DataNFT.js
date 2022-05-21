@@ -1,14 +1,10 @@
 import styled from "styled-components";
 import All from "./Tokens";
-import direct from "./direct";
-import timed from "./timed";
-import unlim from "./unlim";
-import {MyObject} from "./Header"
-import Tokens from "./Tokens";
+import { MyObject } from "./Header"
 
 const fixedNft = [];
 const unlimitedNFT = [];
-const timeNFT = []; 
+const timeNFT = [];
 const nftdata = [
   {
     image: "./images/0.png",
@@ -129,21 +125,21 @@ function unlimNft() {
 function Home() {
   // let val = MyObject.value;
   console.log(MyObject.value)
-   if (MyObject.value === "direct") {
+  if (MyObject.value === "direct") {
     directNft();
     return (
       <Container>
         <direct nfts={fixedNft} />
       </Container>
     );
-  } else if(MyObject.value === "timed") {
+  } else if (MyObject.value === "timed") {
     timedNft();
     return (
       <Container>
         <timed nfts={timeNFT} />
       </Container>
     );
-  } else if(MyObject.value === "unlim") {
+  } else if (MyObject.value === "unlim") {
     unlimNft();
     return (
       <Container>

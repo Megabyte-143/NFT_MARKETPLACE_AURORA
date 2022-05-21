@@ -23,8 +23,7 @@ const Direct = () => {
     //start loading the nfts when webpage loads
     loadNFTs();
 
-  },);
-
+  }, []);
 
   async function loadNFTs() {
 
@@ -68,7 +67,7 @@ const Direct = () => {
     setNfts(nfts);
   }
 
-   async function buyNFT(nft) {
+  async function buyNFT(nft) {
     const web3Modal = new Web3Modal();
     const connection = await web3Modal.connect();
     const provider = new ethers.providers.Web3Provider(connection);
@@ -76,7 +75,7 @@ const Direct = () => {
     const signer = provider.getSigner();
     let contract = new ethers.Contract(nftMarketAddress, NFTMarket.abi, signer);
     console.log(nft.tokenId);
-console.log(nft.price);
+    console.log(nft.price);
 
     const price = ethers.utils.parseUnits(nft.price.toString(), 'ether');
     console.log(price)
@@ -87,7 +86,7 @@ console.log(nft.price);
       nft.tokenId,
       { value: price });
     await transaction.wait();
-    
+
   }
 
   return (
@@ -97,22 +96,22 @@ console.log(nft.price);
         <Tokens nfts={nfts} hide={true} buy="Buy" high="Price: " />
       </Container> */}
       <Container >
-      <Wrap>
-        {
-          nfts.map((nft, i) => (
-            <Content key={i}>
-              <img src={nft.image} />
-              <Inside>
-                <div>
-                  <span className="infinite">Price:</span>
-                  <span className="price">{nft.price} </span>
-                </div>
-                <button className="buy" onClick={()=>buyNFT(nft)}>buy</button>
-              </Inside>
-            </Content>
-          ))}
-      </Wrap>
-    </Container>
+        <Wrap>
+          {
+            nfts.map((nft, i) => (
+              <Content key={i}>
+                <img src={nft.image} />
+                <Inside>
+                  <div>
+                    <span className="infinite">Price:</span>
+                    <span className="price">{nft.price} </span>
+                  </div>
+                  <button className="buy" onClick={() => buyNFT(nft)}>buy</button>
+                </Inside>
+              </Content>
+            ))}
+        </Wrap>
+      </Container>
     </>
   );
 };
