@@ -18,7 +18,7 @@ const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 const Create = (props) => {
   const [index, setIndex] = useState(1);
   const [fileUrl, setFileUrl] = useState(null);
-  const [formInput, updateFormInput] = useState({ name: '', description: '', price: '' });
+  const [formInput, updateFormInput] = useState({ name: '', description: '', price: '' , seller_name:'', seller_phn_num:'', pro_add:'', pro_size:'', pro_type:'',pro_desc:''});
 
   async function onFileChange(e) {
     //selecting the first file, which is uploaded
@@ -45,7 +45,7 @@ const Create = (props) => {
    */
   async function createCertificate() {
     //getting name, description from the formInput dictionary
-    const { name, description, price } = formInput;
+    const { name, description, price ,seller_name,seller_phn_num,pro_add,pro_desc,pro_size,pro_type} = formInput;
 
     //If any of them is not present then it will not create the Item
     if (!name || !description || !fileUrl || !price) return;
@@ -136,22 +136,115 @@ const Create = (props) => {
         </PutOn>
         <Price>
           <span>Price</span>
-          <input type="number" id="number" placeholder="Enter price for one piece"
-            onChange={e => updateFormInput({ ...formInput, price: e.target.value })}></input>
+          <input
+            type="number"
+            id="number"
+            placeholder="Enter price for one piece"
+            onChange={(e) =>
+              updateFormInput({ ...formInput, price: e.target.value })
+            }
+          ></input>
         </Price>
         <Details id="fixed" show={index === 2}>
-
           <span>Name</span>
-          <input type="text" id="text" placeholder='e. g. "Redeemable T-shirt with Logo' onChange={e => updateFormInput({ ...formInput, name: e.target.value })}></input>
+          <input
+            type="text"
+            id="text"
+            placeholder='e. g. "Redeemable T-shirt with Logo'
+            onChange={(e) =>
+              updateFormInput({ ...formInput, name: e.target.value })
+            }
+          ></input>
           <span id="describe">Description</span>
-          <input type="text" id="text" placeholder='e. g. "After purchasing you will be able to get the real T-shirt ' onChange={e => updateFormInput({ ...formInput, description: e.target.value })}></input>
+          <input
+            type="text"
+            id="text"
+            placeholder='e. g. "After purchasing you will be able to get the real T-shirt '
+            onChange={(e) =>
+              updateFormInput({ ...formInput, description: e.target.value })
+            }
+          ></input>
           <span id="service">With preserved line-breaks</span>
+          <span id="seller">Seller Details</span>
+          <Seller>
+            <span>
+              Name :
+              <input
+                type="text"
+                id="text"
+                onChange={(e) =>
+                  updateFormInput({ ...formInput, seller_name: e.target.value })
+                }
+              ></input>
+            </span>
+            <span>
+              Contact No. :
+              <input
+                type="number"
+                id="number"
+                onChange={(e) =>
+                  updateFormInput({
+                    ...formInput,
+                    seller_phn_num: e.target.value,
+                  })
+                }
+              ></input>
+            </span>
+          </Seller>
+          <span id="seller">Real-Estate Details</span>
+            <span id='address'>
+              Address :
+              </span>
+              <input
+                type="text"
+                id="text"
+                onChange={(e) =>
+                  updateFormInput({ ...formInput, pro_add: e.target.value })
+                }
+                ></input>
+            <Seller>
+            <span>
+              Size :
+              <input
+                type="number"
+                id="number"
+                onChange={(e) =>
+                  updateFormInput({
+                    ...formInput,
+                    pro_size: e.target.value,
+                  })
+                }
+              ></input>
+            </span>
+            <span>
+              Type :
+              <input
+                type="text"
+                id="text"
+                onChange={(e) =>
+                  updateFormInput({ ...formInput, pro_type: e.target.value })
+                }
+              ></input>
+            </span>
+          </Seller>
+          <span id='description'>
+            Description :
+            </span>
+            <input
+              type="number"
+              id="number"
+              onChange={(e) =>
+                updateFormInput({
+                  ...formInput,
+                  pro_desc: e.target.value,
+                })
+              }
+            ></input>
         </Details>
         <Button>
-          <button onClick={createCertificate} >Create Item</button>
+          <button onClick={createCertificate}>Create Item</button>
         </Button>
       </Container>
-
     </>
   );
 };
@@ -251,6 +344,14 @@ const Details = styled(Price)`
     #describe {
         padding-top:20px;
     }
+    #seller {
+      margin-top: 20px;
+      margin-bottom: 5px;
+      font-size: 20px;
+    }
+    #address,#description {
+      padding-top: 10px;
+}
 `
 const Button = styled.div`
     align-items: center;
@@ -273,4 +374,17 @@ const Button = styled.div`
             opacity: 1;
         }
     }
+`
+const Seller = styled.div`
+  display: flex;
+  align-items: center;
+  span {
+    width: 100%;
+    padding:10px 0px;
+    overflow: hidden;
+  }
+  input {
+    width:60%;
+  }
+
 `
