@@ -9,7 +9,6 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "./NFT.sol";
-import "./TimedAuction.sol";
 
 contract NFTMarket is ReentrancyGuard {
     using Counters for Counters.Counter;
@@ -66,13 +65,7 @@ contract NFTMarket is ReentrancyGuard {
         address nftContract,
         uint256 tokenId,
         uint256 price
-    )
-        public
-        payable
-        // uint256 royalty,
-        // uint256 auction
-        nonReentrant
-    {
+    ) public payable nonReentrant {
         //Conditions for creating the Item.
         require(price > 0, "Price must be at least 1 WEI");
         require(
