@@ -29,10 +29,11 @@ const Title = styled.div`
   display: flex;
   align-items: center;
   position: fixed;
-  background-color: antiquewhite;
+  background-color: #ff9900;
   justify-content: space-between;
   padding: 0 10px;
-  box-shadow: rgb(0 0 0 / 25%) 0px 26px 30px -10px, rgb(0 0 0/40%) 0px 16px 10px -10px ;
+  box-shadow: rgb(0 0 0 / 25%) 0px 26px 30px -10px,
+    rgb(0 0 0/40%) 0px 16px 10px -10px;
   left: 0;
   right: 0;
   top: 0;
@@ -50,6 +51,7 @@ const Create = styled.div`
   a {
     margin-left: 5px;
     color: black;
+    font-weight: bold;
     letter-spacing: 2px;
     margin-right: 5px;
     padding: 5px 10px;

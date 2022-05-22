@@ -18,12 +18,15 @@ const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 const Create = (props) => {
   const [index, setIndex] = useState(1);
   const [fileUrl, setFileUrl] = useState(null);
+  const [fileImg,setFileImg] = useState();
   const [formInput, updateFormInput] = useState({ name: '', description: '', price: '' , seller_name:'', seller_phn_num:'', pro_add:'', pro_size:'', pro_type:'',pro_desc:''});
 
   async function onFileChange(e) {
     //selecting the first file, which is uploaded
     const file = e.target.files[0];
     try {
+      setFileImg(URL.createObjectURL(e.target.files[0]));
+
       //uploading it to ipfs
       const added = await client.add(
         file,
@@ -113,7 +116,7 @@ const Create = (props) => {
     console.log("completed")
 
     //navigate back to home page
-
+    
   }
 
   return (
@@ -128,6 +131,7 @@ const Create = (props) => {
         </Upload>
         <Preview>
           <input type="file" id="file" onChange={onFileChange} />
+          <img id='FileImg' src={fileImg} />
           <label htmlFor="file">Upload a file</label>
         </Preview>
         <PutOn>
@@ -253,6 +257,7 @@ export default Create;
 
 const Container = styled.div`
   scroll-behavior: smooth;
+  color:white;
   position:relative;
   margin-top: 60px;
   margin-left: 25vw;
@@ -275,33 +280,38 @@ const Upload = styled.div`
   padding-bottom: 20px;
   `;
 const Preview = styled.div`
-background-color: #f0c78f;
-opacity:0.5;
+  background-color: rgb(229, 229, 229, 0.2);
   border: 2px solid grey;
   border-radius: 10px;
+  padding:20px;
   border-style: dashed;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: 20px;
+  img {
+    max-height: 50vh;
+    justify-content: center;
+    display: flex;
+    border-radius: 5px;
+  }
   input {
-    padding-top: 10vh;
-    padding-bottom: 10vh;
     overflow: hidden;
     height: 0.1px;
     width: 0.1px;
     opacity: 0;
   }
   label {
-    border: 1px solid orange;
-    background-color: #e68a00;
+    border: 1px solid white;
+    margin: 20px;
+    background-color: #e5e5e5;
     border-radius: 20px;
     padding: 5px 10px;
-    opacity: 0.8;
+    opacity: 0.5;
     color: black;
     &:hover {
       border-color: transparent;
-      background-color: #e68a00;
+      background-color: white;
       transform: scale(1.05);
       opacity: 1;
     }
@@ -327,6 +337,7 @@ const Price = styled.div`
     padding: 10px;
     padding-left: 5px;
     background:transparent;
+    color:white;
     border: none;
     border-bottom: 2px solid #737373;
   }

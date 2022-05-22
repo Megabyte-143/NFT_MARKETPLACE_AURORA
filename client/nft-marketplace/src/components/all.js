@@ -20,7 +20,6 @@ const All = (props) => {
                   </Create>
                 </Button>
               </Fade>
-                <BgImage/>
             </Content>
         </Container>
       </>
@@ -28,12 +27,13 @@ const All = (props) => {
 }
 
 const Container = styled.section`
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    height:100vh;
-`
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  height: 100vh;
+  background-image: linear-gradient(#14321d,#023e8a,#03045e,black);
+`;
 
 const Content = styled.div`
     margin-bottom: 10vw;
@@ -49,8 +49,8 @@ const Content = styled.div`
     height: 100%;
     h1 {
       color:white;
-      letter-spacing: 2px;
-      font-size:50px;
+      letter-spacing: 3px;
+      font-size:40px;
       max-width:50vw;
     }
 `
@@ -59,34 +59,36 @@ const Button = styled.div`
     flex-direction: row;
 `
 const Explore = styled.div`
-    padding:20px;
-    font-size: 18px;
-    width:10vw;
-    font-weight: bold;
-    opacity:0.5;
-    a {
-      background-color: antiquewhite;
-      padding:15px 40px;
-      border-radius: 10px;
-    }
-    &:hover {
-      opacity:0.8;
-      transform: scale(1.05);
-    }
-`
+  padding: 20px;
+  font-size: 18px;
+  width: 10vw;
+  font-weight: bold;
+  opacity: 0.5;
+  a {
+    background-color: antiquewhite;
+    padding: 15px 40px;
+    border-radius: 10px;
+  }
+  transition: 0.3s ease-in-out;
+  &:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+    transition: 0.3s ease-in-out;
+  }
+`;
 const Create = styled(Explore)``
 
-const BgImage = styled.div`
-    background-position: top;
-    background-size: cover;
-    background-repeat: no-repeat;
-    height:100%;
-    background-image: url('/images/bgimage.jpeg');
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: -1;
-    position: absolute;
-`;
+// const BgImage = styled.div`
+//     background-position: top;
+//     background-size: cover;
+//     background-repeat: no-repeat;
+//     height:100%;
+//     background-image: url('/images/bgimage.jpeg');
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     z-index: -1;
+//     position: absolute;
+// `;
 
 export default All
