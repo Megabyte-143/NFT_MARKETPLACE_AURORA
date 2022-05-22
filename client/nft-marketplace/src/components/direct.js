@@ -16,7 +16,7 @@ import NFTMarket from "../abi/NFTMarket.json"
 const Direct = () => {
   const [nftdata, setNftData] = useState([]);
 
-  const [nfts, setNfts] = useState([]);
+  // const [nfts, setNfts] = useState([]);
   // const [loadingState, setLoadingState] = useState('not-loaded');
 
   useEffect(() => {
@@ -48,23 +48,30 @@ const Direct = () => {
         tokenId: i.tokenId.toNumber(),
         seller: i.seller,
         owner: i.owner,
-        auction: i.auction,
         image: meta.data.image,
         name: meta.data.name,
         description: meta.data.description,
         price: meta.data.price,
+        type: meta.data.pro_type,
+        property_desc: meta.data.pro_desc,
+        property_size: meta.data.pro_size,
+        property_add: meta.data.pro_add,
+        seller_phn: meta.data.seller_phn_num,
       };
       return item;
 
     }));
+    console.log(
+      items
+    )
     setNftData(items);
 
-    const nfts = nftdata.filter((item) => {
-      if (parseInt(item.auction, 16) === 0) {
-        return item;
-      }
-    })
-    setNfts(nfts);
+    // const nfts = nftdata.filter((item) => {
+    //   if (parseInt(item.auction, 16) === 0) {
+    //     return item;
+    //   }
+    // }) 
+    // setNfts(nfts);
   }
 
   async function buyNFT(nft) {
@@ -98,7 +105,7 @@ const Direct = () => {
       <Container >
         <Wrap>
           {
-            nfts.map((nft, i) => (
+            nftdata.map((nft, i) => (
               <Content key={i}>
                 <img src={nft.image} />
                 <Inside>

@@ -10,6 +10,8 @@ import Web3Modal from "web3modal";
 import { nftAddress, nftMarketAddress } from "../config";
 import NFT from "../abi/NFT.json";
 import NFTMarket from "../abi/NFTMarket.json";
+const convert = require('ethereum-unit-converter')
+
 
 
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
@@ -18,8 +20,8 @@ const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0");
 const Create = (props) => {
   const [index, setIndex] = useState(1);
   const [fileUrl, setFileUrl] = useState(null);
-  const [fileImg,setFileImg] = useState();
-  const [formInput, updateFormInput] = useState({ name: '', description: '', price: '' , seller_name:'', seller_phn_num:'', pro_add:'', pro_size:'', pro_type:'',pro_desc:''});
+  const [fileImg, setFileImg] = useState();
+  const [formInput, updateFormInput] = useState({ name: '', description: '', price: '', seller_name: '', seller_phn_num: '', pro_add: '', pro_size: '', pro_type: '', pro_desc: '' });
 
   async function onFileChange(e) {
     //selecting the first file, which is uploaded
@@ -48,13 +50,13 @@ const Create = (props) => {
    */
   async function createCertificate() {
     //getting name, description from the formInput dictionary
-    const { name, description, price ,seller_name,seller_phn_num,pro_add,pro_desc,pro_size,pro_type} = formInput;
+    const { name, description, price, seller_name, seller_phn_num, pro_add, pro_desc, pro_size, pro_type } = formInput;
 
     //If any of them is not present then it will not create the Item
-    if (!name || !description || !fileUrl || !price) return;
+    if (!name || !description || !fileUrl || !price || !seller_name || !seller_phn_num || !pro_add || !pro_desc || !pro_size || !pro_type) return;
 
     const data = JSON.stringify({
-      name, description, image: fileUrl, price, index
+      name, description, image: fileUrl, price, seller_name, seller_phn_num, pro_add, pro_desc, pro_size, pro_type
     });
 
     try {
@@ -96,19 +98,20 @@ const Create = (props) => {
 
     //NFT Market Contract
     contract = new ethers.Contract(nftMarketAddress, NFTMarket.abi, signer);
-
+    console.log(contract)
     //fetching listing price from the contract
     let listingPrice = await contract.getListingPrice();
-    listingPrice = listingPrice.toString();
-
+    // listingPrice = listingPrice.toString();
+    console.log(listingPrice)
+    // listingPrice = convert(listingPrice, 'ether', 'wei');
+    // console.log(listingPrice)
     // const priceC = ethers.utils.parseUnits(price.toString(), 'ether');
 
     //listing the certificate. 
     transaction = await contract.createMarketItem(
       nftAddress,
       tokenId,
-      parseInt(price),
-      index.toString(),
+      ethers.utils.parseUnits(price, 'ether'),
       { value: listingPrice }
     );
     //waiting for the transaction to complete
@@ -116,7 +119,7 @@ const Create = (props) => {
     console.log("completed")
 
     //navigate back to home page
-    
+
   }
 
   return (
@@ -196,17 +199,17 @@ const Create = (props) => {
             </span>
           </Seller>
           <span id="seller">Real-Estate Details</span>
-            <span id='address'>
-              Address :
-              </span>
-              <input
-                type="text"
-                id="text"
-                onChange={(e) =>
-                  updateFormInput({ ...formInput, pro_add: e.target.value })
-                }
-                ></input>
-            <Seller>
+          <span id='address'>
+            Address :
+          </span>
+          <input
+            type="text"
+            id="text"
+            onChange={(e) =>
+              updateFormInput({ ...formInput, pro_add: e.target.value })
+            }
+          ></input>
+          <Seller>
             <span>
               Size :
               <input
@@ -233,17 +236,17 @@ const Create = (props) => {
           </Seller>
           <span id='description'>
             Description :
-            </span>
-            <input
-              type="number"
-              id="number"
-              onChange={(e) =>
-                updateFormInput({
-                  ...formInput,
-                  pro_desc: e.target.value,
-                })
-              }
-            ></input>
+          </span>
+          <input
+            type="number"
+            id="number"
+            onChange={(e) =>
+              updateFormInput({
+                ...formInput,
+                pro_desc: e.target.value,
+              })
+            }
+          ></input>
         </Details>
         <Button>
           <button onClick={createCertificate}>Create Item</button>
