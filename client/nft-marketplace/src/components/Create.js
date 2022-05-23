@@ -111,7 +111,7 @@ const Create = (props) => {
     transaction = await contract.createMarketItem(
       nftAddress,
       tokenId,
-      ethers.utils.parseUnits(price, 'ether'),
+      ethers.utils.parseEther(price),
       { value: listingPrice }
     );
     //waiting for the transaction to complete
