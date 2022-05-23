@@ -84,7 +84,7 @@ const Direct = () => {
     console.log(nft.tokenId);
     console.log(nft.price);
 
-    const price = ethers.utils.parseUnits(nft.price.toString(), 'ether');
+    const price = ethers.utils.formatEther(nft.price.toString());
     console.log(price)
     // console.log(parseInt(price,16));
     // const price = 1;
@@ -107,7 +107,7 @@ const Direct = () => {
           {
             nftdata.map((nft, i) => (
               <Content key={i}>
-                <img src={nft.image} />
+                <img src={nft.image} alt="img not found" />
                 <Inside>
                   <div>
                     <span className="infinite">Price:</span>
@@ -145,27 +145,29 @@ const Wrap = styled.div`
 `;
 
 const Content = styled.div`
-  padding-top: 95%;
-  background-color: white;
+  height: 40vh;
+  background-color: rgb(229,229,229,0.7);
   border-radius: 10px;
   box-shadow: rgb(0 0 0 / 69%) 0px 26px 30px -10px,
     rgb(0 0 0/73%) 0px 16px 10px -10px;
   cursor: pointer;
   position: relative;
+  display:flex;
+  flex-direction:column;
   align-items: center;
   transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s;
-  border:10px solid rgba(249, 249, 249, 0.1);
+  border: 5px solid rgba(249, 249, 249, 0.1);
   img {
-    inset: 0px;
-    display: block;
-    position: absolute;
+    display: flex;
     align-items: center;
     justify-content: center;
     opacity: 1;
-    width: 100%;
+    height: 30vh;
+    max-width:100%;
     transition: opacity 500ms ease-in-out 0s;
     z-index: 1;
     top: 0;
+    padding: 5px;
   }
   &:hover {
     box-shadow: rgb(0 0 0 / 80%) 0px 40px 58px -16px,
@@ -176,20 +178,26 @@ const Content = styled.div`
 `;
 const Inside = styled.div`
   display: flex;
-  padding:5px;
+  padding: 5px;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   /* width: 100%; */
+  
   .buy {
-    background-color: bisque;
+    background-color: #fca311;
     padding: 5px 10px;
     border-radius: 5px;
+    border:none;
+    padding: 5px 10px;
     &:hover {
       background-color: #ff8000;
     }
   }
-  span {
-    font-size:15px;
+  div {
+    padding:5px;
   }
-
+  span {
+    font-size: 18px;
+  }
 `;
