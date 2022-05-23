@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import Header from "./Header";
-import Tokens from "./Tokens";
 import axios from "axios";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
@@ -84,7 +83,7 @@ const Direct = () => {
     console.log(nft.tokenId);
     console.log(nft.price);
 
-    const price = ethers.utils.formatEther(nft.price.toString());
+    const price = ethers.utils.parseEther(nft.price);
     console.log(price)
     // console.log(parseInt(price,16));
     // const price = 1;
