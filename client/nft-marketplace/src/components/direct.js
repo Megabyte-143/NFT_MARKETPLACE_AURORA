@@ -4,9 +4,7 @@ import Header from "./Header";
 import axios from "axios";
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
-
-
-import { nftAddress, nftMarketAddress } from "../config.js"
+import { nftAddress, nftMarketAddress, rpc_url } from "../config.js"
 
 import NFT from "../abi/NFT.json"
 import NFTMarket from "../abi/NFTMarket.json"
@@ -27,7 +25,7 @@ const Direct = () => {
   async function loadNFTs() {
 
     // For the Mumbai Testnet
-    const provider = new ethers.providers.JsonRpcProvider();
+    const provider = new ethers.providers.JsonRpcProvider(rpc_url);
 
     // For the LocalHost
     // const provider = new ethers.providers.JsonRpcProvider();
@@ -92,7 +90,7 @@ const Direct = () => {
       nft.tokenId,
       { value: price });
     await transaction.wait();
-
+    
   }
 
   return (
@@ -109,6 +107,8 @@ const Direct = () => {
                 <img src={nft.image} alt="img not found" />
                 <Inside>
                   <div>
+                    <span>{nft.name}</span>
+                    <br></br>
                     <span className="infinite">Price:</span>
                     <span className="price">{nft.price} </span>
                   </div>
