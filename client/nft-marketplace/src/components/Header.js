@@ -7,7 +7,7 @@ const Header = (props) => {
   return (
     <Title>
       <a href="/">
-        <img src="/images/nft-logo.png" alt="logo"></img>
+        <span>The Boared Broker</span>
       </a>
       <Create>
         <Link to="/create" id="create">{props.click}</Link>
