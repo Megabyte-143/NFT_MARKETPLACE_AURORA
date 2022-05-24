@@ -39,12 +39,14 @@ console.log(nft.price);
             <Inside>
               <img src={nft.image} />
               <div>
+                <span className="title">{nft.name} </span>
+                <br></br>
                 <span className="infinite">{props.high}</span>
                 <span className="price">{nft.price} </span>
               </div>
-              <button className="buy" onClick={() => buyNFT(nft)}>
+              {/* <button className="buy" onClick={() => buyNFT(nft)}>
                 Buy
-              </button>
+              </button> */}
             </Inside>
           </Content>
         ))}
