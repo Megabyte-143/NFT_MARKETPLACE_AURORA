@@ -10,7 +10,6 @@ import Web3Modal from "web3modal";
 import { nftAddress, nftMarketAddress } from "../config";
 import NFT from "../abi/NFT.json";
 import NFTMarket from "../abi/NFTMarket.json";
-const convert = require('ethereum-unit-converter')
 
 
 
@@ -119,7 +118,7 @@ const Create = (props) => {
     console.log("completed")
 
     //navigate back to home page
-
+    
   }
 
   return (
@@ -238,8 +237,8 @@ const Create = (props) => {
             Description :
           </span>
           <input
-            type="number"
-            id="number"
+            type="text"
+            id="text"
             onChange={(e) =>
               updateFormInput({
                 ...formInput,

@@ -10,7 +10,7 @@ const All = (props) => {
         <Container>
             <Content>
             <Fade bottom>
-                <h1>Discover, Collect and sell extraordinary NFTs</h1>
+                <h1>Discover, Collect and sell extraordinary Properties</h1>
                 <Button>
                   <Explore>
                     <a href="/direct">Explore</a>
